@@ -197,8 +197,7 @@ void ImageGrabber::SyncWithImu()
                 {
                     double t = mpImuGb->imuBuf.front()->header.stamp.toSec();
 
-                    cv::Point3f acc(mpImuGb->imuBuf.front()->linear_acceleration.x+10.8, mpImuGb->imuBuf.front()->linear_acceleration.y-0.57, mpImuGb->imuBuf.front()->linear_acceleration.z+0.17);
-                    
+                    cv::Point3f acc(mpImuGb->imuBuf.front()->linear_acceleration.x, mpImuGb->imuBuf.front()->linear_acceleration.y, mpImuGb->imuBuf.front()->linear_acceleration.z);
                     cv::Point3f gyr(mpImuGb->imuBuf.front()->angular_velocity.z, mpImuGb->imuBuf.front()->angular_velocity.y, mpImuGb->imuBuf.front()->angular_velocity.x);
 
                     vImuMeas.push_back(ORB_SLAM3::IMU::Point(acc, gyr, t));

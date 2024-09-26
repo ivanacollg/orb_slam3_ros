@@ -187,6 +187,16 @@ target_link_libraries(ros_mono_compressed
 )
 
 ## ROS node
+add_executable(ros_mono_compressed_field
+  src/ros_mono_compressed_field.cc
+  src/common.cc
+)
+target_link_libraries(ros_mono_compressed_field
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+
+## ROS node
 add_executable(ros_mono_inertial 
   src/ros_mono_inertial.cc
   src/common.cc

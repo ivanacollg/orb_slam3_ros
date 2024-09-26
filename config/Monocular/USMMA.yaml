@@ -8,10 +8,10 @@ File.version: "1.0"
 Camera.type: "PinHole"
 
 # Camera calibration and distortion parameters (OpenCV) 
-Camera1.fx: 1082.021095
-Camera1.fy: 1082.40405
-Camera1.cx: 953.2475
-Camera1.cy: 505.5529
+Camera1.fx: 1048.9128
+Camera1.fy: 1044.4716
+Camera1.cx: 938.53824
+Camera1.cy: 495.39543
 
 Camera1.k1: 0.0
 Camera1.k2: 0.0
@@ -36,9 +36,9 @@ IMU.T_b_c1: !!opencv-matrix
    rows: 4
    cols: 4
    dt: f
-   data: [0.0, 0.0, 1.0, 0.0,
-         1.0, 0.0, 0.0, 0.0,
+   data: [1.0, 0.0, 0.0, 0.0,
          0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
          0.0, 0.0, 0.0, 1.0]
 
 # IMU noise
@@ -65,8 +65,8 @@ ORBextractor.nLevels: 8
 # Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
 # Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
 # You can lower these values if your images have low contrast			
-ORBextractor.iniThFAST: 20
-ORBextractor.minThFAST: 7
+ORBextractor.iniThFAST: 5
+ORBextractor.minThFAST: 3
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters

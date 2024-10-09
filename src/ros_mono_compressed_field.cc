@@ -14,7 +14,8 @@ public:
     ImageGrabber(){};
 
     void GrabImage(const sensor_msgs::CompressedImageConstPtr& msg);
-    cv::Ptr<cv::CLAHE> mClahe = cv::createCLAHE(3.0, cv::Size(8, 8));
+    cv::Ptr<cv::CLAHE> mClahe = cv::createCLAHE(5.0, cv::Size(501, 501));
+    ros::Publisher pub_img;
 };
 
 int main(int argc, char **argv)
@@ -54,9 +55,11 @@ int main(int argc, char **argv)
     ImageGrabber igb;
 
     ros::Subscriber sub_img = node_handler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage, &igb);
+    igb.pub_img = node_handler.advertise<sensor_msgs::Image>("/processed_img", 1);
 
     setup_publishers(node_handler, image_transport, node_name);
     setup_services(node_handler, node_name);
+
 
     ros::spin();
 
@@ -94,19 +97,19 @@ void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr &img_msg
     }
 
     
-    //mClahe->apply(image,image);
-    
     // Filter image
     cv::Mat gray;
     //cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
 
     // Smooth the image
     cv::GaussianBlur(image,gray,cv::Size(5,5),0);
+    //mClahe->apply(gray,gray);
 
     // Apply thresholding 551
     cv::adaptiveThreshold(gray, gray, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 501, 0);
     
     // noise removal
+    
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7));
     cv::morphologyEx(gray, gray,
                     cv::MORPH_OPEN,
@@ -120,4 +123,10 @@ void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr &img_msg
     ros::Time msg_time = img_msg->header.stamp;
 
     publish_topics(msg_time);
+
+    // Convert image from cv::Mat (OpenCV) type to sensor_msgs/Image (ROS) type and publish
+    sensor_msgs::ImagePtr msg;
+    msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", gray).toImageMsg();
+    pub_img.publish(msg);
+    
 }
